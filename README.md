@@ -24,24 +24,7 @@ A Spring Boot web application that manages products with a modern frontend using
 
 ## Architecture
 
-### Database Schema
 
-The application uses a single `products` table with the following structure:
-
-```sql
-CREATE TABLE products (
-    id BIGSERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    vendor VARCHAR(255),
-    product_type VARCHAR(255),
-    price DECIMAL(10, 2),
-    variants JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-**Note**: Product variants are stored as JSONB for flexibility, as one product can have multiple variants.
 
 ### Project Structure
 
@@ -180,33 +163,6 @@ To add new fields to the Product entity:
 3. Update the controller to handle new fields
 4. Update the HTML template
 
-### Testing
-
-```bash
-./gradlew test
-```
-
-## Configuration
-
-Key configurations in `application.properties`:
-
-```properties
-# Database
-spring.datasource.url=jdbc:postgresql://localhost:5432/productdb
-spring.datasource.username=postgres
-spring.datasource.password=postgres
-
-# JPA
-spring.jpa.hibernate.ddl-auto=none
-spring.jpa.show-sql=true
-
-# Flyway
-spring.flyway.enabled=true
-spring.flyway.baseline-on-migrate=true
-
-# Scheduling
-spring.task.scheduling.pool.size=2
-```
 
 ## Troubleshooting
 
@@ -228,19 +184,3 @@ spring.task.scheduling.pool.size=2
 - Verify database has data: `docker exec -it product-manager-db psql -U postgres -d productdb -c "SELECT COUNT(*) FROM products;"`
 - Check network access to https://famme.no/products.json
 
-## Demo Video
-
-Create a Loom video showing:
-1. Starting the application
-2. Database being populated with products
-3. Loading products in the UI
-4. Adding a new product via the form
-5. Code walkthrough of key components:
-   - Entity and Repository
-   - Scheduled job in ProductService
-   - Controller endpoints
-   - HTMX integration in HTML
-
-## License
-
-MIT
