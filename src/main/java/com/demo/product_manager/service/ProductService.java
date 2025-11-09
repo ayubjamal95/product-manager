@@ -89,11 +89,44 @@ public class ProductService {
     }
 
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productRepository.findAllByOrderByPriceAsc();
+    }
+
+    public List<Product> searchProducts(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return productRepository.findAllByOrderByPriceAsc();
+        }
+        return productRepository.findByTitleContainingIgnoreCaseOrderByPriceAsc(query.trim());
+    }
+
+    public Product getProductById(Long id) {
+        return productRepository.findById(id).orElse(null);
     }
 
     @Transactional
     public Product addProduct(Product product) {
         return productRepository.save(product);
+    }
+
+    @Transactional
+    public Product updateProduct(Long id, Product updatedProduct) {
+        Product existingProduct = productRepository.findById(id).orElse(null);
+        if (existingProduct != null) {
+            existingProduct.setTitle(updatedProduct.getTitle());
+            existingProduct.setVendor(updatedProduct.getVendor());
+            existingProduct.setProductType(updatedProduct.getProductType());
+            existingProduct.setPrice(updatedProduct.getPrice());
+            return productRepository.save(existingProduct);
+        }
+        return null;
+    }
+
+    @Transactional
+    public boolean deleteProduct(Long id) {
+        if (productRepository.existsById(id)) {
+            productRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
