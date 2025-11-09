@@ -58,8 +58,6 @@ docker-compose up -d
 
 This will start a PostgreSQL container on port 5432 with:
 - Database: `productdb`
-- Username: `postgres`
-- Password: `postgres`
 
 ### 2. Build the Application
 
@@ -83,37 +81,6 @@ The application will:
 
 Open your browser and navigate to: http://localhost:8080
 
-## How It Works
-
-### Scheduled Job
-
-The `ProductService` has a scheduled method that:
-- Runs immediately on startup (`initialDelay = 0`)
-- Fetches products from https://famme.no/products.json
-- Saves up to 50 products to the database
-- Only runs once (uses `fixedDelay = Long.MAX_VALUE`)
-- Skips execution if products already exist
-
-### HTMX Integration
-
-The frontend uses HTMX for seamless updates:
-
-1. **Load Products**:
-   - Clicking "Load Products" sends GET request to `/products`
-   - Server returns HTML table fragment
-   - HTMX swaps the content into `#products-container`
-
-2. **Add Product**:
-   - Form submits POST request to `/products`
-   - Server saves product and returns updated table
-   - HTMX updates the table without page reload
-   - Form automatically resets after submission
-
-### API Endpoints
-
-- `GET /` - Main page (serves index.html)
-- `GET /products` - Returns products table HTML fragment
-- `POST /products` - Adds new product and returns updated table HTML
 
 ## Database Operations
 
@@ -153,15 +120,6 @@ docker-compose down -v
 ### Hot Reload
 
 The application uses Spring Boot DevTools for automatic restart on code changes.
-
-### Adding Fields
-
-To add new fields to the Product entity:
-
-1. Update `Product.java` entity
-2. Create a new Flyway migration in `src/main/resources/db/migration/`
-3. Update the controller to handle new fields
-4. Update the HTML template
 
 
 ## Troubleshooting
